@@ -1,8 +1,8 @@
 <?php
-class	Zhaket_License
+class Zhaket_License
 {
 	static $check_url = 'http://guard.zhaket.com/api/';
-	// Constructor of lncs class
+	// Constructor of Zhaket_License class
 	public	function	__construct()
 	{
 		
