@@ -16,14 +16,8 @@ class Zhaket_License
         $param_string = http_build_query($params);
         $protocol = ($https) ? 'https://' : 'http://';
 
-        $zendExtension = get_loaded_extensions();
-        if (!in_array('curl', $zendExtension)) {
-            return __('A problem has occurred, the curl plugin is disabled on your host, please contact your hosts support.', 'zhaket-guard');
-        }
-
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, CURLOPT_URL,
             $protocol . self::$api_url . $method . '?' . $param_string
         );
@@ -58,6 +52,13 @@ class Zhaket_License
     //-------------------------------------------------
     public static function getHost()
     {
+        $domain = get_home_url();
+        $result = parse_url($domain);
+
+        if (isset($result['host']) && !empty($result['host'])) {
+            return $result['host'];
+        }
+
         $possibleHostSources = array('HTTP_X_FORWARDED_HOST', 'HTTP_HOST', 'SERVER_NAME', 'SERVER_ADDR');
         $sourceTransformations = array(
             "HTTP_X_FORWARDED_HOST" => function ($value) {
@@ -65,7 +66,9 @@ class Zhaket_License
                 return trim(end($elements));
             }
         );
+
         $host = '';
+
         foreach ($possibleHostSources as $source) {
             if (!empty($host)) break;
             if (empty($_SERVER[$source])) continue;
