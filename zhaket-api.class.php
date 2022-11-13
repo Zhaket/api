@@ -15,8 +15,15 @@ class Zhaket_License
     {
         $param_string = http_build_query($params);
         $protocol = ($https) ? 'https://' : 'http://';
+
+        $zendExtension = get_loaded_extensions();
+        if (!in_array('curl', $zendExtension)) {
+            return __('A problem has occurred, the curl plugin is disabled on your host, please contact your hosts support.', 'zhaket-guard');
+        }
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, CURLOPT_URL,
             $protocol . self::$api_url . $method . '?' . $param_string
         );
