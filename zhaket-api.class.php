@@ -22,7 +22,7 @@ class Zhaket_License
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $protocol . $api_url . $method . '?' . $param_string );
-        curl_setopt($ch, CURLOPT_TIMEOUT, 10); //add timeoute
+        curl_setopt($ch, CURLOPT_TIMEOUT, 15); //add timeoute
 
         $content = curl_exec($ch);
         $error = curl_error($ch);
